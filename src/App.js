@@ -8,7 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage"; // Import the HomePage component
 import DashboardPage from "./pages/DashboardPage";
 import VillageManagement from "./pages/VillageManagement";
-
+import Overview from "./pages/Overview";
 function App() {
   return (
     // <div>
@@ -24,6 +24,7 @@ function App() {
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/overview" element={<Overview />} />
       <Route path="/village-management" element={<VillageManagement />} />
     </Routes>
   </Router>
