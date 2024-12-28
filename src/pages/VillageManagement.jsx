@@ -16,7 +16,7 @@ const villagesData = [
 
 const VillageManagement = () => {
   const [villages, setVillages] = useState(villagesData);
-  const [selectedOption, setSelectedOption] = useState("Default");
+  const [ setSelectedOption] = useState("Default");
   //const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState(""); // 'view', 'update', 'addDemographic', or 'addVillage'
@@ -30,6 +30,13 @@ const VillageManagement = () => {
   const [image, setImage] = useState(null); // For image upload
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 const [villageToDelete, setVillageToDelete] = useState(null);
+const [searchQuery, setSearchQuery] = useState("");
+
+// Filter villages based on search query
+const filteredVillages = villages.filter((village) =>
+  village.name.toLowerCase().includes(searchQuery.toLowerCase())
+);
+
 
   // Debugging: Log whenever the villages state updates
   useEffect(() => {
@@ -117,7 +124,7 @@ const handleSortChange = (option) => {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentVillages = villages.slice(indexOfFirstItem, indexOfLastItem);
+  //const currentVillages = villages.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleNextPage = () => {
     if (currentPage < Math.ceil(villages.length / itemsPerPage)) {
@@ -134,29 +141,29 @@ const handleSortChange = (option) => {
   ///////////////////////////////////////////
 
   return (
-    <div className="flex bg-[#1a202c] min-h-screen">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-[#1a202c] ">
       {/* Sidebar */}
       <Sidebar />
 
       {/* Main Content */}
-      <div className="ml-64 p-6 flex-1">
+      <div className=" flex-1 ml-64 p-6 flex-1">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-6">
           <button
             onClick={handleAddVillage}
             className="bg-[#4a5568] hover:bg-[#3b4453] text-white px-4 py-2 rounded shadow-md"
           >
             Add New Village
           </button>
-        </div>
+          </div>
 
-        {/* Search, Sort, and Pagination Section */}
-         <div className="bg-[#2d3748] p-4 rounded-lg mb-6 shadow-md">
+          {/* Search, Sort, and Pagination Section */}
+         <div className="bg-[#2d3748] p-4 rounded-lg mb-6 shadow-md relative">
           <h1 className="text-xl font-semibold text-[#c4ced9] mb-4">View Village List</h1>
-          
-            <SearchBar/>
+          <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+
           {/* Sort by and Pagination Buttons */}
-          <div className="mt-4 flex justify-between items-center">
+           <div className="mt-4 flex justify-between items-center">
             {/* Sort Dropdown */}
             <div className="flex items-center space-x-2 ">
               <label className="text-gray-400">Sort by:</label>
@@ -166,12 +173,10 @@ const handleSortChange = (option) => {
                 onChange={handleSortChange}
               />
                  {/* Page Number */}
-            <div className="absolute bottom-[-40px] right-4 text-sm text-[#d6d9df] font-bold">
-              Page: {currentPage}
-            </div>
-            </div>
+             
+             </div>
 
-            {/* Pagination Buttons */}
+             {/* Pagination Buttons */}
           
               <Pagination
             currentPage={currentPage}
@@ -183,7 +188,7 @@ const handleSortChange = (option) => {
           </div>
 
           {/* Village List */}
-          <div className="space-y-4 bg mt-4">
+          {/* <div className="space-y-4 bg mt-4">
         
             {currentVillages.map((village) => (
                   <VillageCard
@@ -197,10 +202,28 @@ const handleSortChange = (option) => {
                   />
                 ))}
     
-          </div>
+          </div> */}
+                  <div className="space-y-4 bg mt-4">
+                        {filteredVillages.slice(indexOfFirstItem, indexOfLastItem).map((village) => (
+                    <VillageCard
+                      key={village.id}
+                      villageName={village.name}
+                      region={village.region}
+                      onView={() => handleView(village)}
+                      onUpdate={() => handleUpdate(village)}
+                      onDelete={() => handleDeleteClick(village)}
+                      onAddDemographic={() => handleAddDemographic(village)}
+                    />
+                  ))}
+                </div>
+                <div className="absolute bottom-[-40px] right-4 text-sm text-[#d6d9df] font-bold bg-[#1a202c]">
+              Page: {currentPage}
+              
+             </div>
         </div>
 
         
+      
       </div>
       {/* Modals */}
       {isModalOpen && (

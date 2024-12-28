@@ -2,11 +2,11 @@ import React from "react";
 
 const VillageCard = ({ villageName, region, onView, onUpdate, onDelete, onAddDemographic }) => {
   return (
-    <div className="flex justify-between items-center bg-[#374151] text-gray-300 px-6 py-4 rounded-lg shadow mb-1">
+    <div className="flex justify-between items-center bg-[#374151] text-gray-300 px-6 py-4 rounded-lg shadow mb-1 flex-wrap" >
       <div className="font-semibold text-lg">
         {villageName} - {region}
       </div>
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         <button
           className="bg-[#718096] text-white px-3 py-1 rounded hover:bg-[#4a5568] font-medium"
           onClick={onView}

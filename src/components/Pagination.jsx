@@ -22,7 +22,7 @@ import React from "react";
 const Pagination = ({ currentPage, totalPages, onPrev, onNext }) => {
   return (
     <div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2  flex-col sm:flex-row justify-between">
         <span className="text-[#d6d9df] text-sm font-bold">Page:</span>
         <button
           onClick={onPrev}
