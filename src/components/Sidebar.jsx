@@ -98,7 +98,7 @@
 //     </>
 //   );
 // };
-//for responsive testing 
+//for responsive testing the above code 
 // export default Sidebar;
 import React from "react";
 import { Link, useLocation } from "react-router-dom";

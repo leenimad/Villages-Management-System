@@ -16,8 +16,8 @@ const villagesData = [
 
 const VillageManagement = () => {
   const [villages, setVillages] = useState(villagesData);
-  const [ setSelectedOption] = useState("Default");
-  //const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("Default"); // Fixed here
+  //   //const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState(""); // 'view', 'update', 'addDemographic', or 'addVillage'
   const [selectedVillage, setSelectedVillage] = useState(null);
@@ -31,7 +31,11 @@ const VillageManagement = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 const [villageToDelete, setVillageToDelete] = useState(null);
 const [searchQuery, setSearchQuery] = useState("");
-
+/////////// for roles 
+const [userRole, setUserRole] = useState("user"); 
+const [isUnauthorizedModalOpen, setIsUnauthorizedModalOpen] = useState(false);
+  const [unauthorizedMessage, setUnauthorizedMessage] = useState("");
+  
 // Filter villages based on search query
 const filteredVillages = villages.filter((village) =>
   village.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -47,7 +51,8 @@ const filteredVillages = villages.filter((village) =>
  /////////////////////////////////sort by functionality
 
 const handleSortChange = (option) => {
-  setSelectedOption(option);
+  // setSelectedOption(option);
+  setSelectedOption(option); // Fixed here
 
   if (option === "Alphabetical") {
     const sortedVillages = [...villages].sort((a, b) =>
@@ -59,6 +64,17 @@ const handleSortChange = (option) => {
   }
 };
 ////////////////////////////////////////////////////////////////
+/// for roles
+const handleUnauthorized = (message) => {
+  setUnauthorizedMessage(message);
+  setIsUnauthorizedModalOpen(true);
+};
+
+const closeUnauthorizedModal = () => {
+  setIsUnauthorizedModalOpen(false);
+  setUnauthorizedMessage("");
+};
+//////////////////////////////////////////////////
   const handleView = (village) => {
     setSelectedVillage(village);
     setModalType("view");
@@ -66,6 +82,12 @@ const handleSortChange = (option) => {
   };
 
   const handleUpdate = (village) => {
+    ////////////// for roles
+    // if (userRole !== "Admin") {
+    //   handleUnauthorized("You are not authorized to update village details.");
+    //   return;
+    // }
+    ////////////////
     setSelectedVillage(village);
     setVillageName(village.name);
     setRegion(village.region);
@@ -80,12 +102,25 @@ const handleSortChange = (option) => {
   
 
   const handleAddDemographic = (village) => {
+    ///////////// for roles
+    // if (userRole !== "Admin") {
+    //   handleUnauthorized("You are not authorized to update village details.");
+    //   return;
+    // }
+      //////////////////////
     setSelectedVillage(village);
     setModalType("addDemographic");
     setIsModalOpen(true);
   };
 
   const handleDeleteClick = (village) => {
+    ///////////// for roles
+
+    // if (userRole !== "Admin") {
+    //   handleUnauthorized("You are not authorized to delete villages.");
+    //   return;
+    // }
+    //////////////////////////
     setVillageToDelete(village); // Set the village to delete
     setIsDeleteModalOpen(true); // Open the delete modal
   };
@@ -103,6 +138,13 @@ const handleSortChange = (option) => {
   
 
   const handleAddVillage = () => {
+    /////////////// for roles
+
+    // if (userRole !== "Admin") {
+    //   handleUnauthorized("You are not authorized to add a village.");
+    //   return;
+    // }
+    //////////////////////////////////
     setModalType("addVillage");
     setIsModalOpen(true);
   };
@@ -149,12 +191,14 @@ const handleSortChange = (option) => {
       <div className=" flex-1 ml-64 p-6 flex-1">
         {/* Header */}
             <div className="flex justify-between items-center mb-6">
+              {/* //the user role is to hide button for user  */}
+            {userRole === "Admin" &&(
           <button
             onClick={handleAddVillage}
             className="bg-[#4a5568] hover:bg-[#3b4453] text-white px-4 py-2 rounded shadow-md"
           >
             Add New Village
-          </button>
+          </button>)}
           </div>
 
           {/* Search, Sort, and Pagination Section */}
@@ -210,9 +254,16 @@ const handleSortChange = (option) => {
                       villageName={village.name}
                       region={village.region}
                       onView={() => handleView(village)}
-                      onUpdate={() => handleUpdate(village)}
-                      onDelete={() => handleDeleteClick(village)}
-                      onAddDemographic={() => handleAddDemographic(village)}
+                      ///////////// withoiout roles
+                      // onUpdate={() => handleUpdate(village)}
+                      // onDelete={() => handleDeleteClick(village)}
+                      // onAddDemographic={() => handleAddDemographic(village)}
+                      //////////////////////////////////////
+                      onUpdate={userRole === "Admin" ? () => handleUpdate(village) : null}
+                      onDelete={userRole === "Admin" ? () => {} : null}
+                      onAddDemographic={userRole === "Admin" ? () => {} : null}
+                      userRole={userRole} // Pass user role to hide buttons in VillageCard
+
                     />
                   ))}
                 </div>
@@ -220,6 +271,25 @@ const handleSortChange = (option) => {
               Page: {currentPage}
               
              </div>
+             {/* for roles لو بدي احلي الكبسات يعني*/}
+{/* Unauthorized Modal */}
+{/* {isUnauthorizedModalOpen && (
+          <Modal title="Unauthorized" onClose={closeUnauthorizedModal}>
+            <div className="text-white">
+              <p>{unauthorizedMessage}</p>
+              <div className="mt-4 text-center">
+                <button
+                  onClick={closeUnauthorizedModal}
+                  className="bg-red-600 px-4 py-2 rounded hover:bg-red-700"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </Modal>
+        )} */}
+
+             {/* for roles */}
         </div>
 
         
@@ -265,7 +335,7 @@ const handleSortChange = (option) => {
         <img
           src={URL.createObjectURL(selectedVillage.image)}
           alt="Village"
-          className="mt-2 w-full max-h-40 object-cover rounded-md"
+          className="mt-2 w-full max-h-100 object-cover rounded-md"
         />
       </div>
     )}
@@ -575,8 +645,3 @@ const handleSortChange = (option) => {
 };
 
 export default VillageManagement;
-// لحد هون كل الكبسات شغالات بس المودال تبع اد نيو فلج بده تزبيط 
-// لاوم اتاكد انه ريسبونسف
-// اسوي كبسات النكست والبريفيوس
-//السورت باي بدها تعديلات
-// ابدا فالسات والجاليري
