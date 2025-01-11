@@ -1,11 +1,9 @@
 
-
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Sidebar from "../components/Sidebar";
 
 const Chat = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [contacts, setContacts] = useState([]);
   const [selectedContact, setSelectedContact] = useState(null);
@@ -14,7 +12,7 @@ const Chat = () => {
   const ws = useRef(null); // WebSocket reference
   const username = localStorage.getItem("username"); // Current user's username
   const role = localStorage.getItem("role"); // Current user's role
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   // Fetch contacts (Admins or Users)
   useEffect(() => {
     const fetchContacts = async () => {
@@ -115,7 +113,7 @@ const Chat = () => {
     };
 
     fetchMessages();
-  }, [selectedContact]);
+  }, [username,selectedContact]);
 
   // Send message
   const handleSendMessage = () => {
@@ -140,19 +138,18 @@ const Chat = () => {
 
   return (
     <div className="flex bg-[#1a202c] min-h-screen overflow-hidden lg:overflow-visible">
-      {/* Sidebar */}
-      <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
-
-      {/* Main Chat Content */}
-      <div
-  className={`flex-1 overflow-y-auto max-h-screen scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 scrollbar-thumb-rounded-full scrollbar-track-rounded-full transition-all duration-300 ${
-    isSidebarOpen ? "ml-64" : "ml-0"
-   } p-4 sm:p-6 w-full text-white `}
-   >
-        <h1 className="text-xl md:text-2xl font-bold text-white mb-4 md:mb-6 mt-7">Chat</h1>
-
+          {/* Sidebar */}
+          <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
+    
+          {/* Main Chat Content */}
+    <div
+      className={`flex-1 overflow-y-auto max-h-screen scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 scrollbar-thumb-rounded-full scrollbar-track-rounded-full transition-all duration-300 ${
+        isSidebarOpen ? "ml-64" : "ml-0"
+       } p-4 sm:p-6 w-full text-white `}
+       >
+   <h1 className="text-xl md:text-2xl font-bold text-white mb-4 md:mb-6 mt-7">Chat</h1>
         {/* Search Bar */}
-        <div className="mb-4"> 
+        <div className="mb-4">
           <input
             type="text"
             placeholder={`Search for a ${role === "Admin" ? "user" : "admin"}...`}
@@ -176,8 +173,8 @@ const Chat = () => {
                 <button
                   key={person.username}
                   onClick={() => setSelectedContact(person.username)}
-                  className={`flex flex-col  cursor-pointer ${
-                    selectedContact === person.username ? "text-blue-500" : "text-white  " 
+                  className={`flex flex-col cursor-pointer ${
+                    selectedContact === person.username ? "text-blue-500" : "text-white"
                   }`}
                 >
                   <img
@@ -185,7 +182,7 @@ const Chat = () => {
                     alt="Profile"
                     className="w-10 h-10 bg-gray-600 rounded-full"
                   />
-                  <span className="mt-2 text-xl">{person.username}</span>
+                  <span className="mt-2 text-l">{person.username}</span>
                 </button>
               ))}
           </div>
@@ -201,7 +198,7 @@ const Chat = () => {
                   <p
                     className={`${
                       message.sender === "You"
-                        ? "text-green-400 text-left"
+                        ? "text-green-400 text-right"
                         : "text-blue-400 text-left"
                     }`}
                   >
