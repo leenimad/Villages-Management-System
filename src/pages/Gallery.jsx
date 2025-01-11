@@ -122,8 +122,8 @@ const Gallery = () => {
 
       {/* Main Content */}
       <div
-  className={`transition-all duration-300 ${
-    isSidebarOpen ? "ml-64" : "ml-0"
+  className={`flex-1 transition-all duration-300 ${
+    isSidebarOpen ? "ml-64 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 scrollbar-thumb-rounded-full scrollbar-track-rounded-full" : "mt-6 ml-0"
   } p-4 sm:p-6 w-full text-white`}
 >
         {/* Add New Image Button for Admin */}

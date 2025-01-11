@@ -1,7 +1,7 @@
 
 import React, { useState,useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-
+import axios from "axios";
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const location = useLocation();
   const username = localStorage.getItem("username");
@@ -91,9 +91,42 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             <div className="w-10 h-10 bg-gray-600 rounded-full"></div>
           )}
           <span className="ml-3">{username || "Admin"}</span>
-          <a href="/" className="text-red-500 ml-auto hover:underline">
+          {/* <a href="/" className="text-red-500 ml-auto hover:underline">
             Logout
-          </a>
+          </a> */}
+          <a
+  href="/"
+  onClick={async () => {
+    const username = localStorage.getItem("username");
+
+    if (username) {
+      try {
+        const response = await axios.post("http://localhost:5000/graphql", {
+          query: `
+            mutation {
+              logout(username: "${username}")
+            }
+          `,
+        });
+
+        if (response.data.data.logout) {
+          console.log("User logged out successfully.");
+        } else {
+          console.error("Failed to log out.");
+        }
+      } catch (err) {
+        console.error("Error during logout:", err);
+      }
+    }
+
+    // Clear localStorage and redirect to login
+    localStorage.clear();
+  }}
+  className="text-red-500 ml-auto hover:underline"
+>
+  Logout
+</a>
+
         </div>
       </div>
 
@@ -101,7 +134,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed top-4 left-4 bg-gray-700 text-white p-2 rounded-md focus:outline-none z-50"
+          className="fixed top-4 left-4 bg-gray-700 text-white p-2 rounded-md focus:outline-none z-50 mb-5"
         >
           <div className="space-y-1">
             <div className="w-5 h-0.5 bg-white"></div>

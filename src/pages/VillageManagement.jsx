@@ -479,8 +479,8 @@ const genderRatiosString = `Male: ${maleRatio}%, Female: ${femaleRatio}%`;
 
         {/* Main Content */}
         <div
-  className={`flex-1 overflow-y-auto max-h-screen transition-all duration-300 ${
-    isSidebarOpen ? "ml-64" : "ml-0"
+  className={`flex-1   overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 scrollbar-thumb-rounded-full scrollbar-track-rounded-full max-h-screen transition-all duration-300 ${
+    isSidebarOpen ? "ml-64" : "mt-6 ml-0"
   } p-4 sm:p-6 w-full text-white`}
 >
 

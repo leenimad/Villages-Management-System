@@ -484,11 +484,11 @@ const Overview = () => {
 
       {/* Main Content */}
       <div
-  className={`flex-1 overflow-y-auto max-h-screen transition-all duration-300 ${
+  className={`flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 scrollbar-thumb-rounded-full scrollbar-track-rounded-full max-h-screen transition-all duration-300 ${
     isSidebarOpen ? "ml-64" : "ml-0"
-  } p-4 sm:p-6 w-full text-white`}
->
-        <h1 className="text-3xl font-bold mb-4">Overview</h1>
+   } p-4 sm:p-6 w-full text-white`}
+   >
+        <h1 className="text-3xl font-bold mb-4 mt-4">Overview</h1>
 
         {/* Map Section */}
         <div className="mb-6">

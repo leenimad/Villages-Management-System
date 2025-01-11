@@ -280,7 +280,8 @@ type Message {
     deleteImage(id: ID!): Boolean!
      toggleAdminActiveStatus(username: String!, isActive: Boolean!): User
        sendMessage(from: String!, to: String!, text: String!): Message
-  }
+  logout(username: String!): Boolean!
+       }
 `);
 
 const validatePassword = (password) => {
@@ -291,14 +292,28 @@ const validatePassword = (password) => {
 };
 
 const root = {
+  // login: async ({ username, password }) => {
+  //   const users = JSON.parse(fs.readFileSync(usersFile));
+  //   const user = users.find((u) => u.username === username);
+  //   if (!user) throw new Error('Username or password is incorrect.');
+  //   const isPasswordValid = await bcrypt.compare(password, user.password);
+  //   if (!isPasswordValid) throw new Error('Username or password is incorrect.');
+  //   return { token: `${user.id}-token`, role: user.role, profilePhoto: user.profilePhoto };
+  // },
   login: async ({ username, password }) => {
     const users = JSON.parse(fs.readFileSync(usersFile));
     const user = users.find((u) => u.username === username);
     if (!user) throw new Error('Username or password is incorrect.');
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) throw new Error('Username or password is incorrect.');
+
+    // Update isActive to true
+    user.isActive = true;
+    fs.writeFileSync(usersFile, JSON.stringify(users, null, 2));
+
     return { token: `${user.id}-token`, role: user.role, profilePhoto: user.profilePhoto };
-  },
+},
 
   signup: async ({ userInput }) => {
     const users = JSON.parse(fs.readFileSync(usersFile));
@@ -309,6 +324,18 @@ const root = {
     users.push(newUser);
     fs.writeFileSync(usersFile, JSON.stringify(users, null, 2));
     return newUser;
+  },
+  logout: ({ username }) => {
+    const users = JSON.parse(fs.readFileSync(usersFile));
+    const user = users.find((u) => u.username === username);
+
+    if (!user) throw new Error("User not found.");
+
+    // Update isActive to false
+    user.isActive = false;
+    fs.writeFileSync(usersFile, JSON.stringify(users, null, 2));
+
+    return true; // Return true if the operation succeeded
   },
   ////////////////////////////is active////////////////
   toggleAdminActiveStatus: ({ username, isActive }) => {
