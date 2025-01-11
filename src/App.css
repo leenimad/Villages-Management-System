@@ -12,6 +12,17 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+.modal {
+  z-index: 1000;
+  position: fixed;
+  isolation: isolate;
+}
+
+.leaflet-container {
+  z-index: 0; /* or any value lower than the modal */
+}
+
+
 
 .App-header {
   background-color: #282c34;

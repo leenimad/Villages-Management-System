@@ -12,6 +12,7 @@ import Chat from "./pages/Chat";
  import Gallery from "./pages/Gallery";
  import "leaflet/dist/leaflet.css";
 import "./leafletConfig";
+import EditUser from "./pages/EditUser";
  
  
 function App() {
@@ -31,6 +32,14 @@ function App() {
       <Route path="/village-management" element={<VillageManagement />} />
       <Route path="/chat" element={<Chat />} />
       <Route path="/gallery" element={<Gallery />} />
+      <Route path="/edit-profile" element={
+    <EditUser
+      userId={localStorage.getItem("userId")}
+      initialUsername={localStorage.getItem("username")}
+      initialProfilePhoto={localStorage.getItem("profilePhoto")}
+      onClose={() => {/* optional navigation code */}}
+    />
+  } />
     </Routes>
   </Router>
 );

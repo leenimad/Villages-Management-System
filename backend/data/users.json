@@ -5,7 +5,7 @@
     "password": "$2b$10$o.ocMIdT052HpNbjgUku7.E058bryOM55jAuuYWhpXGs0kLu70ToS",
     "role": "user",
     "profilePhoto": "",
-    "isActive": false
+    "isActive": true
   },
   {
     "id": 2,
